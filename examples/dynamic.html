@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <script type="text/javascript" src="../util/messagingUtil.js"></script>
+    <script type="text/javascript" src="../util/contentUtil.js"></script>
     <title>Dynamic venn.js example</title>
     <style>
         body {
@@ -98,6 +100,14 @@ function draw() {
 draw();
 // redraw the sets on any change in input
 d3.selectAll("input").on("change", draw);
+
+function onDataRecieved(messageFromVA)
+{
+  d3.selectAll("input").on("change", draw);
+}
+
+va.messagingUtil.setOnDataReceivedCallback(onDataReceived);
+
 
 </script>
 </html>
