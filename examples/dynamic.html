@@ -103,7 +103,7 @@ d3.selectAll("input").on("change", draw);
 
 function onDataRecieved(messageFromVA)
 {
-  d3.selectAll("input").on("change", draw);
+  draw();
 }
 
 va.messagingUtil.setOnDataReceivedCallback(onDataReceived);
