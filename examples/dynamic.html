@@ -73,7 +73,6 @@ function getSetIntersections() {
     return areas;
 }
 
-
 // draw the initial set
 var chart = venn.VennDiagram()
                  .width(600)
@@ -98,6 +97,20 @@ function draw() {
 draw();
 // redraw the sets on any change in input
 d3.selectAll("input").on("change", draw);
+
+/** Setup some of the SAS handlers */
+function onDataRecieved()
+{
+  d3.selectAll("input").on("change", draw);
+}
+
+    function readyHandler()
+    {}
+
+    function selectHandler()
+    {}
+
+
 
 </script>
 </html>
