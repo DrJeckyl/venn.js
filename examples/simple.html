@@ -26,7 +26,7 @@ var sets = [ {sets: ['A'], size: 12},
              {sets: ['A','B'], size: 2}];
 
 var _data = [
-    [22, 16, 12, 4, 4, 3, 2]
+    [50, 50, 10, 5, 5, 5, 2]
 ]
 
 function getSetIntersectionsFromVA() {
@@ -57,13 +57,10 @@ function onDataRecieved(messageFromVA)
   }
   _data = messageFromVA.data;
   _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
-
-  sets = getSetIntersectionsFromVA();
-  d3.select("#venn").datum(sets).call(chart);
 }
 
-// sets = getSetIntersectionsFromVA();
-// d3.select("#venn").datum(sets).call(chart);
+sets = getSetIntersectionsFromVA();
+d3.select("#venn").datum(sets).call(chart);
 
 </script>
 </html>
