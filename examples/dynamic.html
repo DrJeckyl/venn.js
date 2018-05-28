@@ -117,6 +117,7 @@ function draw() {
 
 draw();
 // redraw the sets on any change in input
+d3.select(".venn_area").select('A').property("value", 22);
 d3.selectAll("input").on("change", draw);
 
 function onDataRecieved(messageFromVA)
