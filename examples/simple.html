@@ -25,6 +25,10 @@ var sets = [ {sets: ['A'], size: 12},
              {sets: ['B'], size: 12},
              {sets: ['A','B'], size: 2}];
 
+var _data = [
+    [22, 16, 12, 4, 4, 3, 2]
+]
+
 function getSetIntersectionsFromVA() {
   areas = [
     { sets: ["A"], size: parseFloat(_data[0][0]) },
@@ -33,12 +37,14 @@ function getSetIntersectionsFromVA() {
     { sets: ["A", "B"], size: parseFloat(_data[0][3]) },
     { sets: ["A", "C"], size: parseFloat(_data[0][4]) },
     { sets: ["B", "C"], size: parseFloat(_data[0][5]) },
-    { sets: ["A", "B", "C"], size: parseFloat(_data[0][6]) },
+    { sets: ["A", "B", "C"], size: parseFloat(_data[0][6]) }
   ];
   return areas;
 }
 
 va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
+
+var chart = venn.VennDiagram();
 
 function onDataRecieved(messageFromVA)
 {
@@ -53,10 +59,11 @@ function onDataRecieved(messageFromVA)
   _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
 
   sets = getSetIntersectionsFromVA();
-  var chart = venn.VennDiagram();
   d3.select("#venn").datum(sets).call(chart);
 }
 
+// sets = getSetIntersectionsFromVA();
+// d3.select("#venn").datum(sets).call(chart);
 
 </script>
 </html>
