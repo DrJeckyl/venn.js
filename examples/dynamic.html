@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <script type="text/javascript" src="../utils/messagingUtil.js"></script>
+    <script type="text/javascript" src="../utils/contentUtil.js"></script>
     <title>Dynamic venn.js example</title>
     <style>
         body {
@@ -17,43 +19,43 @@
     <tr>
       <td>|A|</td>
       <td>
-        <input class="input-mini venn_area" id="A" type="number" value="16">
+        <input class="input-mini venn_area" id="A" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|B|</td>
       <td>
-        <input class="input-mini venn_area" id="B" type="number" value="16">
+        <input class="input-mini venn_area" id="B" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|C|</td>
       <td>
-        <input class="input-mini venn_area" id="C" type="number" value="12">
+        <input class="input-mini venn_area" id="C" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|A&#8745B|</td>
       <td>
-        <input class="input-mini venn_area" id="A,B" type="number" value="4">
+        <input class="input-mini venn_area" id="A,B" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|A&#8745C|</td>
       <td>
-        <input class="input-mini venn_area" id="A,C" type="number" value="4">
+        <input class="input-mini venn_area" id="A,C" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|B&#8745C|</td>
       <td>
-        <input class="input-mini venn_area" id="B,C" type="number" value="3">
+        <input class="input-mini venn_area" id="B,C" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|A&#8745B&#8745C|&nbsp</td>
       <td>
-        <input class="input-mini venn_area" id="A,B,C" type="number" value="2">
+        <input class="input-mini venn_area" id="A,B,C" type="number" value="1">
       </td>
     </tr>
     </table>
@@ -65,6 +67,11 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="../venn.js"></script>
 <script>
+
+var _resultData = null;
+var _resultName = null;
+var _data = null;
+
 function getSetIntersections() {
     areas = d3.selectAll(".venn_area").nodes().map(
         function (element) {
@@ -73,6 +80,18 @@ function getSetIntersections() {
     return areas;
 }
 
+function getSetIntersectionsFromVA() {
+  areas = [
+    { sets: ["A"], size: parseFloat(_data[0][0]) },
+    { sets: ["B"], size: parseFloat(_data[0][1]) },
+    { sets: ["C"], size: parseFloat(_data[0][2]) },
+    { sets: ["A", "B"], size: parseFloat(_data[0][3]) },
+    { sets: ["A", "C"], size: parseFloat(_data[0][4]) },
+    { sets: ["B", "C"], size: parseFloat(_data[0][5]) },
+    { sets: ["A", "B", "C"], size: parseFloat(_data[0][6]) },
+  ];
+  return areas;
+}
 
 // draw the initial set
 var chart = venn.VennDiagram()
@@ -95,9 +114,42 @@ function draw() {
         .style("font-weight", "100");
 }
 
+function drawVA() {
+    d3.select("#venn").datum(getSetIntersectionsFromVA()).call(chart);
+    // tweak style
+    var colours = ['black', 'red', 'blue'];
+    d3.selectAll("#venn .venn-circle path")
+        .style("fill-opacity", 0)
+        .style("stroke-width", 10)
+        .style("stroke-opacity", .5)
+        .style("stroke", function(d,i) { return colours[i]; });
+
+    d3.selectAll("#venn .venn-circle text")
+        .style("fill", function(d,i) { return colours[i]})
+        .style("font-size", "32px")
+        .style("font-weight", "100");
+}
+
 draw();
 // redraw the sets on any change in input
 d3.selectAll("input").on("change", draw);
+
+function onDataRecieved(messageFromVA)
+{
+  _resultData = messageFromVA;
+  _resultName = messageFromVA._resultName;
+  if (!va.validateRoles(messageFromVA, ["number", "number", "number", "number", "number", "number", "number"], null)) {
+    va.messagingUtil.postInstructionalMessage(_resultName, 
+      "D3 Bar Chart expects columns to be 7 numbers");
+    return;  
+  }
+  _data = messageFromVA.data;
+  _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
+  drawVA();
+}
+
+va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
+
 
 </script>
 </html>
