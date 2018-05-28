@@ -67,6 +67,11 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="../venn.js"></script>
 <script>
+
+var _resultData = null;
+var _resultName = null;
+var _data = null;
+
 function getSetIntersections() {
     areas = d3.selectAll(".venn_area").nodes().map(
         function (element) {
@@ -74,7 +79,6 @@ function getSetIntersections() {
                      size: parseFloat(element.value)};} );
     return areas;
 }
-
 
 // draw the initial set
 var chart = venn.VennDiagram()
@@ -99,10 +103,20 @@ function draw() {
 
 draw();
 // redraw the sets on any change in input
+d3.select(".venn_area").select('A').property("value", 22);
 d3.selectAll("input").on("change", draw);
 
 function onDataRecieved(messageFromVA)
 {
+  _resultData = messageFromVA;
+  _resultName = messageFromVA._resultName;
+  if (!va.validateRoles(messageFromVA, ["number", "number", "number", "number", "number", "number", "number"], null)) {
+    va.messagingUtil.postInstructionalMessage(_resultName, 
+      "D3 Bar Chart expects columns to be 7 numbers");
+    return;  
+  }
+  _data = messageFromVA.data;
+  _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
   draw();
 }
 
