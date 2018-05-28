@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <script type="text/javascript" src="../utils/messagingUtil.js"></script>
+    <script type="text/javascript" src="../utils/contentUtil.js"></script>
     <title>Simple venn.js example</title>
 <style>
 body {
@@ -23,8 +25,38 @@ var sets = [ {sets: ['A'], size: 12},
              {sets: ['B'], size: 12},
              {sets: ['A','B'], size: 2}];
 
-var chart = venn.VennDiagram();
-d3.select("#venn").datum(sets).call(chart);
+function getSetIntersectionsFromVA() {
+  areas = [
+    { sets: ["A"], size: parseFloat(_data[0][0]) },
+    { sets: ["B"], size: parseFloat(_data[0][1]) },
+    { sets: ["C"], size: parseFloat(_data[0][2]) },
+    { sets: ["A", "B"], size: parseFloat(_data[0][3]) },
+    { sets: ["A", "C"], size: parseFloat(_data[0][4]) },
+    { sets: ["B", "C"], size: parseFloat(_data[0][5]) },
+    { sets: ["A", "B", "C"], size: parseFloat(_data[0][6]) },
+  ];
+  return areas;
+}
+
+va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
+
+function onDataRecieved(messageFromVA)
+{
+  _resultData = messageFromVA;
+  _resultName = messageFromVA._resultName;
+  if (!va.validateRoles(messageFromVA, ["number", "number", "number", "number", "number", "number", "number"], null)) {
+    va.messagingUtil.postInstructionalMessage(_resultName, 
+      "D3 Bar Chart expects columns to be 7 numbers");
+    return;  
+  }
+  _data = messageFromVA.data;
+  _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
+
+  sets = getSetIntersectionsFromVA();
+  var chart = venn.VennDiagram();
+  d3.select("#venn").datum(sets).call(chart);
+}
+
 
 </script>
 </html>
