@@ -21,9 +21,9 @@ body {
 <script src="../venn.js"></script>
 <script>
 // define sets and set set intersections
-var sets = [ {sets: ['A'], size: 12},
-             {sets: ['B'], size: 12},
-             {sets: ['A','B'], size: 2}];
+// var sets = [ {sets: ['A'], size: 12},
+//              {sets: ['B'], size: 12},
+//              {sets: ['A','B'], size: 2}];
 
 var _data = [
     [50, 50, 10, 5, 5, 5, 2]
@@ -50,13 +50,16 @@ function onDataRecieved(messageFromVA)
 {
   _resultData = messageFromVA;
   _resultName = messageFromVA._resultName;
-  if (!va.validateRoles(messageFromVA, ["number", "number", "number", "number", "number", "number", "number"], null)) {
-    va.messagingUtil.postInstructionalMessage(_resultName, 
-      "D3 Bar Chart expects columns to be 7 numbers");
-    return;  
-  }
+//   if (!va.validateRoles(messageFromVA, ["number", "number", "number", "number", "number", "number", "number"], null)) {
+//     va.messagingUtil.postInstructionalMessage(_resultName, 
+//       "D3 Bar Chart expects columns to be 7 numbers");
+//     return;  
+//   }
   _data = messageFromVA.data;
-  _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
+  sets = getSetIntersectionsFromVA();
+  d3.select("#venn").datum(sets).call(chart);
+
+//   _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
 }
 
 sets = getSetIntersectionsFromVA();
