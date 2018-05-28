@@ -148,4 +148,4 @@ div.selectAll("g")
 Released under the MIT License.
 
 Take a look at some JSON returned from VA:
-[View this example](http://DrJeckyl.github.io.venn.js/examples/json_viewer.html)
+[View this example](http://DrJeckyl.github.io/venn.js/examples/json_viewer.html)
