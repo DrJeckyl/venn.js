@@ -33,11 +33,11 @@ function getSetIntersectionsFromVA() {
   areas = [
     { sets: ["A"], size: parseFloat(_data[0][0]) },
     { sets: ["B"], size: parseFloat(_data[0][1]) },
-    // { sets: ["C"], size: parseFloat(_data[0][2]) },
+    { sets: ["C"], size: parseFloat(_data[0][2]) },
     { sets: ["A", "B"], size: parseFloat(_data[0][3]) },
-    // { sets: ["A", "C"], size: parseFloat(_data[0][4]) },
-    // { sets: ["B", "C"], size: parseFloat(_data[0][5]) },
-    // { sets: ["A", "B", "C"], size: parseFloat(_data[0][6]) }
+    { sets: ["A", "C"], size: parseFloat(_data[0][4]) },
+    { sets: ["B", "C"], size: parseFloat(_data[0][5]) },
+    { sets: ["A", "B", "C"], size: parseFloat(_data[0][6]) }
   ];
   return areas;
 }
