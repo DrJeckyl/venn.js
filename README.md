@@ -146,3 +146,6 @@ div.selectAll("g")
 [View this example](http://DrJeckyl.github.io/venn.js/examples/intersection_tooltip.html)
 
 Released under the MIT License.
+
+Take a look at some JSON returned from VA:
+[View this example](http://DrJeckyl.github.io/venn.js/examples/json_viewer.html)
