@@ -99,8 +99,23 @@ var chart = venn.VennDiagram()
                  .height(500);
 
 function draw() {
+    d3.select("#venn").datum(getSetIntersections()).call(chart);
+    // tweak style
+    var colours = ['black', 'red', 'blue'];
+    d3.selectAll("#venn .venn-circle path")
+        .style("fill-opacity", 0)
+        .style("stroke-width", 10)
+        .style("stroke-opacity", .5)
+        .style("stroke", function(d,i) { return colours[i]; });
+
+    d3.selectAll("#venn .venn-circle text")
+        .style("fill", function(d,i) { return colours[i]})
+        .style("font-size", "32px")
+        .style("font-weight", "100");
+}
+
+function drawVA() {
     d3.select("#venn").datum(getSetIntersectionsFromVA()).call(chart);
-    // d3.select("#venn").datum(getSetIntersections()).call(chart);
     // tweak style
     var colours = ['black', 'red', 'blue'];
     d3.selectAll("#venn .venn-circle path")
@@ -117,7 +132,6 @@ function draw() {
 
 draw();
 // redraw the sets on any change in input
-d3.select(".venn_area").select('A').property("value", 22);
 d3.selectAll("input").on("change", draw);
 
 function onDataRecieved(messageFromVA)
@@ -131,7 +145,14 @@ function onDataRecieved(messageFromVA)
   }
   _data = messageFromVA.data;
   _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
-  draw();
+  if (data)
+  {
+    drawVA();
+  }
+  else
+  {
+    return;
+  }
 }
 
 va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
