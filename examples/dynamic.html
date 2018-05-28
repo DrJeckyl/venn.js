@@ -19,43 +19,43 @@
     <tr>
       <td>|A|</td>
       <td>
-        <input class="input-mini venn_area" id="A" type="number" value="16">
+        <input class="input-mini venn_area" id="A" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|B|</td>
       <td>
-        <input class="input-mini venn_area" id="B" type="number" value="16">
+        <input class="input-mini venn_area" id="B" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|C|</td>
       <td>
-        <input class="input-mini venn_area" id="C" type="number" value="12">
+        <input class="input-mini venn_area" id="C" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|A&#8745B|</td>
       <td>
-        <input class="input-mini venn_area" id="A,B" type="number" value="4">
+        <input class="input-mini venn_area" id="A,B" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|A&#8745C|</td>
       <td>
-        <input class="input-mini venn_area" id="A,C" type="number" value="4">
+        <input class="input-mini venn_area" id="A,C" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|B&#8745C|</td>
       <td>
-        <input class="input-mini venn_area" id="B,C" type="number" value="3">
+        <input class="input-mini venn_area" id="B,C" type="number" value="1">
       </td>
     </tr>
     <tr>
       <td>|A&#8745B&#8745C|&nbsp</td>
       <td>
-        <input class="input-mini venn_area" id="A,B,C" type="number" value="2">
+        <input class="input-mini venn_area" id="A,B,C" type="number" value="1">
       </td>
     </tr>
     </table>
@@ -145,14 +145,7 @@ function onDataRecieved(messageFromVA)
   }
   _data = messageFromVA.data;
   _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
-  if (data)
-  {
-    drawVA();
-  }
-  else
-  {
-    return;
-  }
+  drawVA();
 }
 
 va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
