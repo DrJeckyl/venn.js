@@ -37,13 +37,7 @@ body {
 <script>
 
 var _data = [
-    [16, 16, 12, 4, 4, 3, 2]
-]
-
-var _column_data = [
-    {label: "Product A"},
-    {label: "Product B"},
-    {label: "Product C"}
+    [16, 16, 12, 4, 4, 3, 2, "Product A", "Product B", "Product C"]
 ]
 
 function getSetIntersectionsFromVA() {
@@ -56,7 +50,7 @@ function getSetIntersectionsFromVA() {
   A n C     => 4
   B n C     => 5
   A n B n C => 6
-  Set Labels (_column_data[].label): 
+  Set Labels (_data[].label): 
   A         => 0
   B         => 1
   C         => 2
@@ -69,9 +63,9 @@ function getSetIntersectionsFromVA() {
   var BnC = parseFloat(_data[0][5]);
   var AnBnC = parseFloat(_data[0][6]);
 
-  var AName = _column_data[0].label;
-  var BName = _column_data[1].label;
-  var CName = _column_data[2].label;
+  var AName = _data[7].label;
+  var BName = _data[8].label;
+  var CName = _data[9].label;
   areas = [
     { sets: [AName], size: A },
     { sets: [BName], size: B },
