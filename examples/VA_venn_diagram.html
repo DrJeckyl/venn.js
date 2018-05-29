@@ -35,7 +35,7 @@ body {
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="../venn.js"></script>
 <script>
-    
+
 var _data = null;
 var sample_data = [
     [16, 16, 12, 4, 4, 3, 2, "Product A", "Product B", "Product C"]
@@ -91,12 +91,12 @@ function onDataRecieved(messageFromVA)
 {
     _resultData = messageFromVA;
     _resultName = messageFromVA._resultName;
-    if (!va.validateRoles(messageFromVA, 
+    if (!va.contentUtil.validateRoles(messageFromVA, 
             ["number", "number", "number", "number","number", "number", "number", "string", "string", "string"], 
             null)) {
         va.messagingUtil.postInstructionalMessage(_resultName, 
             "D3 Bar Chart expects columns to be 7 numbers");
-    return;  
+        return;  
     }
     _data = messageFromVA.data;
     _column_data = messageFromVA.columns;
