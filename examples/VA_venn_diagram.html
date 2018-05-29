@@ -152,9 +152,7 @@ function mouseOver(div) {
         });
 }
 
-var chart = venn.VennDiagram()
-                 .width(500)
-                 .height(500);
+var chart = venn.VennDiagram();
 var div = d3.select("#venn");
 
 sets = getSetIntersectionsFromVA();
