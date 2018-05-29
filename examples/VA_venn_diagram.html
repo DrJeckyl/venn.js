@@ -35,46 +35,50 @@ body {
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="../venn.js"></script>
 <script>
-
-var _data = [
+    
+var _data = null;
+var sample_data = [
     [16, 16, 12, 4, 4, 3, 2, "Product A", "Product B", "Product C"]
 ]
 
 function getSetIntersectionsFromVA() {
-  /*
-  Data Order (_data[0][]):
-  A         => 0     
-  B         => 1
-  C         => 2
-  A n B     => 3
-  A n C     => 4
-  B n C     => 5
-  A n B n C => 6
-  Set Labels (_data[].label): 
-  A         => 0
-  B         => 1
-  C         => 2
-  */
-  var A = parseFloat(_data[0][0]);
-  var B = parseFloat(_data[0][1]);
-  var C = parseFloat(_data[0][2]);
-  var AnB = parseFloat(_data[0][3]);
-  var AnC = parseFloat(_data[0][4]);
-  var BnC = parseFloat(_data[0][5]);
-  var AnBnC = parseFloat(_data[0][6]);
+    /*
+    Data Order (_data[0][]):
+    A         => 0     
+    B         => 1
+    C         => 2
+    A n B     => 3
+    A n C     => 4
+    B n C     => 5
+    A n B n C => 6
+    Set Labels (_data[].label): 
+    A         => 0
+    B         => 1
+    C         => 2
+    */
+    if (!_data) {
+        _data = sample_data;
+    }
+    var A = parseFloat(_data[0][0]);
+    var B = parseFloat(_data[0][1]);
+    var C = parseFloat(_data[0][2]);
+    var AnB = parseFloat(_data[0][3]);
+    var AnC = parseFloat(_data[0][4]);
+    var BnC = parseFloat(_data[0][5]);
+    var AnBnC = parseFloat(_data[0][6]);
 
-  var AName = _data[7].label;
-  var BName = _data[8].label;
-  var CName = _data[9].label;
-  areas = [
-    { sets: [AName], size: A },
-    { sets: [BName], size: B },
-    { sets: [CName], size: C },
-    { sets: [AName, BName], size: AnB },
-    { sets: [AName, CName], size: AnC },
-    { sets: [BName, CName], size: BnC },
-    { sets: [AName, BName, CName], size: AnBnC }
-  ];
+    var AName = _data[0][7];
+    var BName = _data[0][8];
+    var CName = _data[0][9];
+    areas = [
+        { sets: [AName], size: A },
+        { sets: [BName], size: B },
+        { sets: [CName], size: C },
+        { sets: [AName, BName], size: AnB },
+        { sets: [AName, CName], size: AnC },
+        { sets: [BName, CName], size: BnC },
+        { sets: [AName, BName, CName], size: AnBnC }
+    ];
   return areas;
 }
 
@@ -87,11 +91,13 @@ function onDataRecieved(messageFromVA)
 {
     _resultData = messageFromVA;
     _resultName = messageFromVA._resultName;
-    //   if (!va.validateRoles(messageFromVA, ["number", "number", "number", "number","number", "number", "number"], null)) {
-    //     va.messagingUtil.postInstructionalMessage(_resultName, 
-    //       "D3 Bar Chart expects columns to be 7 numbers");
-    //     return;  
-    //   }
+    if (!va.validateRoles(messageFromVA, 
+            ["number", "number", "number", "number","number", "number", "number", "string", "string", "string"], 
+            null)) {
+        va.messagingUtil.postInstructionalMessage(_resultName, 
+            "D3 Bar Chart expects columns to be 7 numbers");
+    return;  
+    }
     _data = messageFromVA.data;
     _column_data = messageFromVA.columns;
     sets = getSetIntersectionsFromVA();
