@@ -82,11 +82,13 @@ function getSetIntersectionsFromVA() {
   return areas;
 }
 
-va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
 
 var chart = venn.VennDiagram();
 var div = d3.select("#venn");
+sets = getSetIntersectionsFromVA();
+div.datum(sets).call(chart);
 
+va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
 function onDataRecieved(messageFromVA)
 {
     _resultData = messageFromVA;
@@ -101,12 +103,9 @@ function onDataRecieved(messageFromVA)
     _data = messageFromVA.data;
     _column_data = messageFromVA.columns;
     sets = getSetIntersectionsFromVA();
-    div = d3.select("#venn");
+    // div = d3.select("#venn");
     div.datum(sets).call(chart);
 }
-
-sets = getSetIntersectionsFromVA();
-div.datum(sets).call(chart);
 
 var tooltip = d3.select("body").append("div")
     .attr("class", "venntooltip");
