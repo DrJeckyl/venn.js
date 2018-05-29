@@ -37,7 +37,28 @@ body {
 <script>
 
 var _data = null;
-var sample_data = [
+var _resultData = null;
+var _column_data = null;
+var _formatter = null;
+var _sampleColLabels = [
+    {label: "A"},
+    {label: "B"},
+    {label: "C"},
+    {label: "AnB"},
+    {label: "AnC"},
+    {label: "BnC"},
+    {label: "AnBnC"}
+];
+var _sampleFormatter = {};
+_sampleFormatter["A"] = d3.format("12,.0f");
+_sampleFormatter["B"] = d3.format("12,.0f");
+_sampleFormatter["C"] = d3.format("12,.0f");
+_sampleFormatter["AnB"] = d3.format("12,.0f");
+_sampleFormatter["AnC"] = d3.format("12,.0f");
+_sampleFormatter["BnC"] = d3.format("12,.0f");
+_sampleFormatter["AnBnC"] = d3.format("12,.0f");
+
+var sampleData = [
     [16, 16, 12, 4, 4, 3, 2, "Product A", "Product B", "Product C"]
 ]
 
@@ -56,20 +77,29 @@ function getSetIntersectionsFromVA() {
     B         => 1
     C         => 2
     */
-    if (!_data) {
-        _data = sample_data;
+    if (!_resultData) {
+        data = sampleData;
+        labels = _sampleColLabels;
+        formatter = _sampleFormatter;
     }
-    var A = parseFloat(_data[0][0]);
-    var B = parseFloat(_data[0][1]);
-    var C = parseFloat(_data[0][2]);
-    var AnB = parseFloat(_data[0][3]);
-    var AnC = parseFloat(_data[0][4]);
-    var BnC = parseFloat(_data[0][5]);
-    var AnBnC = parseFloat(_data[0][6]);
+    else
+    {
+        data = _data;
+        formatter = _formatter;
+        labels = _column_data;
+    }
 
-    var AName = _data[0][7];
-    var BName = _data[0][8];
-    var CName = _data[0][9];
+    var A = formatter[labels[0].label](parseFloat(data[0][0]));
+    var B = formatter[labels[1].label](parseFloat(data[0][1]));
+    var C = formatter[labels[2].label](parseFloat(data[0][2]));
+    var AnB = formatter[labels[3].label](parseFloat(data[0][3]));
+    var AnC = formatter[labels[4].label](parseFloat(data[0][4]));
+    var BnC = formatter[labels[5].label](parseFloat(data[0][5]));
+    var AnBnC = formatter[labels[6].label](parseFloat(data[0][6]));
+
+    var AName = data[0][7];
+    var BName = data[0][8];
+    var CName = data[0][9];
     areas = [
         { sets: [AName], size: A },
         { sets: [BName], size: B },
@@ -121,7 +151,9 @@ function mouseOver(div) {
         });
 }
 
-var chart = venn.VennDiagram();
+var chart = venn.VennDiagram()
+                 .width(800)
+                 .height(800);
 var div = d3.select("#venn");
 
 sets = getSetIntersectionsFromVA();
@@ -142,6 +174,7 @@ function onDataRecieved(messageFromVA)
     // }
     _data = messageFromVA.data;
     _column_data = messageFromVA.columns;
+    _formatter = va.d3Helper.configureFormatter(messageFromVA);
     sets = getSetIntersectionsFromVA();
     // div = d3.select("#venn");
     div.datum(sets).call(chart);
