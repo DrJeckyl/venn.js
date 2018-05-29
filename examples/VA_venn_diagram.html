@@ -88,24 +88,24 @@ var div = d3.select("#venn");
 sets = getSetIntersectionsFromVA();
 div.datum(sets).call(chart);
 
-va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
-function onDataRecieved(messageFromVA)
-{
-    _resultData = messageFromVA;
-    _resultName = messageFromVA._resultName;
-    // if (!va.contentUtil.validateRoles(messageFromVA, 
-    //         ["number", "number", "number", "number","number", "number", "number", "string", "string", "string"], 
-    //         null)) {
-    //     va.messagingUtil.postInstructionalMessage(_resultName, 
-    //         "D3 Bar Chart expects columns to be 7 numbers");
-    //     return;  
-    // }
-    _data = messageFromVA.data;
-    _column_data = messageFromVA.columns;
-    sets = getSetIntersectionsFromVA();
-    // div = d3.select("#venn");
-    div.datum(sets).call(chart);
-}
+// va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
+// function onDataRecieved(messageFromVA)
+// {
+//     _resultData = messageFromVA;
+//     _resultName = messageFromVA._resultName;
+//     // if (!va.contentUtil.validateRoles(messageFromVA, 
+//     //         ["number", "number", "number", "number","number", "number", "number", "string", "string", "string"], 
+//     //         null)) {
+//     //     va.messagingUtil.postInstructionalMessage(_resultName, 
+//     //         "D3 Bar Chart expects columns to be 7 numbers");
+//     //     return;  
+//     // }
+//     _data = messageFromVA.data;
+//     _column_data = messageFromVA.columns;
+//     sets = getSetIntersectionsFromVA();
+//     // div = d3.select("#venn");
+//     div.datum(sets).call(chart);
+// }
 
 var tooltip = d3.select("body").append("div")
     .attr("class", "venntooltip");
