@@ -90,25 +90,33 @@ function getSetIntersectionsFromVA() {
         labels = _column_data;
     }
 
-    var A = formatter[labels[0].label](parseFloat(data[0][0]));
-    var B = formatter[labels[1].label](parseFloat(data[0][1]));
-    var C = formatter[labels[2].label](parseFloat(data[0][2]));
-    var AnB = formatter[labels[3].label](parseFloat(data[0][3]));
-    var AnC = formatter[labels[4].label](parseFloat(data[0][4]));
-    var BnC = formatter[labels[5].label](parseFloat(data[0][5]));
-    var AnBnC = formatter[labels[6].label](parseFloat(data[0][6]));
+    var A = parseFloat(data[0][0]);
+    var B = parseFloat(data[0][1]);
+    var C = parseFloat(data[0][2]);
+    var AnB = parseFloat(data[0][3]);
+    var AnC = parseFloat(data[0][4]);
+    var BnC = parseFloat(data[0][5]);
+    var AnBnC = parseFloat(data[0][6]);
+
+    var Af = formatter[labels[0].label](parseFloat(data[0][0]));
+    var Bf = formatter[labels[1].label](parseFloat(data[0][1]));
+    var Cf = formatter[labels[2].label](parseFloat(data[0][2]));
+    var AnBf = formatter[labels[3].label](parseFloat(data[0][3]));
+    var AnCf = formatter[labels[4].label](parseFloat(data[0][4]));
+    var BnCf = formatter[labels[5].label](parseFloat(data[0][5]));
+    var AnBnCf = formatter[labels[6].label](parseFloat(data[0][6]));
 
     var AName = data[0][7];
     var BName = data[0][8];
     var CName = data[0][9];
     areas = [
-        { sets: [AName], size: A },
-        { sets: [BName], size: B },
-        { sets: [CName], size: C },
-        { sets: [AName, BName], size: AnB },
-        { sets: [AName, CName], size: AnC },
-        { sets: [BName, CName], size: BnC },
-        { sets: [AName, BName, CName], size: AnBnC }
+        { sets: [AName], size: A, tooltip: Af},
+        { sets: [BName], size: B, tooltip: Bf },
+        { sets: [CName], size: C, tooltip: Cf },
+        { sets: [AName, BName], size: AnB, tooltip: AnBf },
+        { sets: [AName, CName], size: AnC, tooltip: AnCf },
+        { sets: [BName, CName], size: BnC, tooltip: BnCf },
+        { sets: [AName, BName, CName], size: AnBnC, tooltip: AnBnCf }
     ];
   return areas;
 }
@@ -129,7 +137,7 @@ function mouseOver(div) {
 
             // Display a tooltip with the current size
             tooltip.transition().duration(400).style("opacity", .9);
-            tooltip.text(d.size);
+            tooltip.text(d.tooltip);
 
             // highlight the current path
             var selection = d3.select(this).transition("tooltip").duration(400);
