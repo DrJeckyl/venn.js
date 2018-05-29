@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="../utils/messagingUtil.js"></script>
+    <script type="text/javascript" src="../utils/contentUtil.js"></script>
+    <title>Simple venn.js example</title>
+<style>
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+    <div id="venn"></div>
+</body>
+
+<style>
+    .venntooltip {
+      position: absolute;
+      text-align: center;
+      width: 128px;
+      height: 16px;
+      background: #333;
+      color: #ddd;
+      padding: 2px;
+      border: 0px;
+      border-radius: 8px;
+      opacity: 0;
+    }
+</style>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../venn.js"></script>
+<script>
+
+var _data = [
+    [16, 16, 12, 4, 4, 3, 2, "Product A", "Product B", "Product C"]
+]
+
+function getSetIntersectionsFromVA() {
+  /*
+  Data Order:
+  A         => 0     
+  B         => 1
+  C         => 2
+  A n B     => 3
+  A n C     => 4
+  B n C     => 5
+  A n B n C => 6
+  Set Labels: 
+  A         => 7
+  B         => 8
+  C         => 9
+  */  
+  areas = [
+    { sets: [_data[0][7]], size: parseFloat(_data[0][0]) },
+    { sets: [_data[0][8]], size: parseFloat(_data[0][1]) },
+    { sets: [_data[0][9]], size: parseFloat(_data[0][2]) },
+    { sets: [_data[0][7], _data[0][8]], size: parseFloat(_data[0][3]) },
+    { sets: [_data[0][7], _data[0][9]], size: parseFloat(_data[0][4]) },
+    { sets: [_data[0][8], _data[0][9]], size: parseFloat(_data[0][5]) },
+    { sets: [_data[0][7], _data[0][8], _data[0][9]], size: parseFloat(_data[0][6]) }
+  ];
+  return areas;
+}
+
+va.messagingUtil.setOnDataReceivedCallback(onDataRecieved);
+
+var chart = venn.VennDiagram();
+var div = d3.select("#venn")
+
+function onDataRecieved(messageFromVA)
+{
+    _resultData = messageFromVA;
+    _resultName = messageFromVA._resultName;
+      if (!va.validateRoles(messageFromVA, [
+          "number", "number", "number", "number", 
+          "number", "number", "number"
+        ], null)) {
+        va.messagingUtil.postInstructionalMessage(_resultName, 
+          "D3 Bar Chart expects columns to be 7 numbers");
+        return;  
+      }
+    _data = messageFromVA.data;
+    sets = getSetIntersectionsFromVA();
+    div = d3.select("#venn")
+    div.datum(sets).call(chart);
+
+    //   _axisFormatter = va.d3Helper.configureAxisFormatter(messageFromVA);
+}
+
+sets = getSetIntersectionsFromVA();
+div.datum(sets).call(chart);
+
+var tooltip = d3.select("body").append("div")
+    .attr("class", "venntooltip");
+
+div.selectAll("path")
+    .style("stroke-opacity", 0)
+    .style("stroke", "#fff")
+    .style("stroke-width", 3)
+
+div.selectAll("g")
+    .on("mouseover", function(d, i) {
+        // sort all the areas relative to the current item
+        venn.sortAreas(div, d);
+
+        // Display a tooltip with the current size
+        tooltip.transition().duration(400).style("opacity", .9);
+        tooltip.text(d.size);
+
+        // highlight the current path
+        var selection = d3.select(this).transition("tooltip").duration(400);
+        selection.select("path")
+            .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+            .style("stroke-opacity", 1);
+    })
+
+    .on("mousemove", function() {
+        tooltip.style("left", (d3.event.pageX) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+    })
+
+    .on("mouseout", function(d, i) {
+        tooltip.transition().duration(400).style("opacity", 0);
+        var selection = d3.select(this).transition("tooltip").duration(400);
+        selection.select("path")
+            .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+            .style("stroke-opacity", 0);
+    });
+
+</script>
+</html>
