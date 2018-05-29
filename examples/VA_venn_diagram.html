@@ -93,10 +93,7 @@ function onDataRecieved(messageFromVA)
 {
     _resultData = messageFromVA;
     _resultName = messageFromVA._resultName;
-      if (!va.validateRoles(messageFromVA, [
-          "number", "number", "number", "number", 
-          "number", "number", "number"
-        ], null)) {
+      if (!va.validateRoles(messageFromVA, ["number", "number", "number", "number","number", "number", "number"], null)) {
         va.messagingUtil.postInstructionalMessage(_resultName, 
           "D3 Bar Chart expects columns to be 7 numbers");
         return;  
